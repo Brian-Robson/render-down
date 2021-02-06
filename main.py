@@ -13,7 +13,6 @@ def shrink_image(img, target_width):
     wpercent = (max_width/float(img.size[0]))
     hsize = int((float(img.size[1])*float(wpercent)))
     img = img.resize((max_width,hsize), Image.ANTIALIAS)
-    img.show()
     return img
 
 def floyd_steinberg(img, img_width, img_height):
@@ -54,4 +53,3 @@ while True:
     floyd_steinberg(img_px, img_width, img_height)
     img.show()
     img_px = img.load()
-    print(img_px[0,0])
