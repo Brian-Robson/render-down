@@ -38,6 +38,13 @@ def find_closest(old_pixel):
             best = i
     return int(palette[best])
 
+def apply_hue(target_hue, img, img_width, img_height):
+    for y in range(img_height):
+        for x in range(img_width):
+            img[x, y] = (target_hue, 255 - img[x, y][2], img[x, y][2])
+    return img
+
+img_count = 0
 while True:
     print("Select an image to work with, or cancel to end program.")
     file_path = select_image()
@@ -51,5 +58,15 @@ while True:
     img_width, img_height = img.size
     img_px = img.load()
     floyd_steinberg(img_px, img_width, img_height)
-    img.show()
+    target_hue = int(input("Target hue for image: "))
+    if not (isinstance(target_hue, int)) or not (0 <= target_hue <= 255):
+        print("Bad hue value given, saving image as processed.png.")
+        img.save("processed" + str(img_count) + ".png")
+        break
+    img = img.convert('HSV')
+    img_width, img_height = img.size
     img_px = img.load()
+    apply_hue(target_hue, img_px, img_width, img_height)
+    img = img.convert('RGB')
+    img.save("processed" + str(img_count) + ".png")
+    img_count += 1
